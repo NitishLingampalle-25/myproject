@@ -1,0 +1,64 @@
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBhlZbYOaitsv0SOXC5PNi3JDob7KhRxOU",
+    authDomain: "vce-projects-hub.firebaseapp.com",
+    projectId: "vce-projects-hub",
+    storageBucket: "vce-projects-hub.appspot.com",
+    messagingSenderId: "1043662637389",
+    appId: "1:1043662637389:web:316b9be9e37cd5742d8f04",
+    measurementId: "G-8Z0QYTVFFJ"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  // Handle form submission
+  document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const title = document.getElementById('title').value;
+    const domain = document.getElementById('domain').value;
+    const motivation = document.getElementById('motivation').value;
+    const learnings = document.getElementById('learnings').value;
+    const mistakes = document.getElementById('mistakes').value;
+    const prerequisites = document.getElementById('prerequisites').value;
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const userEmail = user.email;
+        const userUID = user.uid;
+
+        db.collection('projects').add({
+          title,
+          domain,
+          motivation,
+          learnings,
+          mistakes,
+          prerequisites,
+          uploadedBy: userEmail,
+          userId: userUID,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+          alert("✅ Project submitted successfully!");
+          document.querySelector('form').reset();
+        })
+        .catch(error => {
+          console.error("❌ Error adding document: ", error);
+          alert("Something went wrong. Try again.");
+        });
+      } else {
+        alert("You must be logged in to upload a project.");
+        window.location.href = "login.html";
+      }
+    });
+  });
+</script>

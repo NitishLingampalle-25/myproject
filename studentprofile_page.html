@@ -1,0 +1,91 @@
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBhlZbYOaitsv0SOXC5PNi3JDob7KhRxOU",
+    authDomain: "vce-projects-hub.firebaseapp.com",
+    projectId: "vce-projects-hub",
+    storageBucket: "vce-projects-hub.appspot.com",
+    messagingSenderId: "1043662637389",
+    appId: "1:1043662637389:web:316b9be9e37cd5742d8f04",
+    measurementId: "G-8Z0QYTVFFJ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Replace this with dynamic email from login in real-world
+  const studentEmail = "nitish@example.com";
+
+  const profileElements = {
+    name: document.querySelector(".info h2"),
+    branch: document.querySelector(".info p:nth-of-type(1)"),
+    year: document.querySelector(".info p:nth-of-type(2)"),
+    interests: document.querySelector(".info p:nth-of-type(3)"),
+    linkedin: document.querySelector(".linkedin a"),
+    projectSection: document.querySelector(".project-section")
+  };
+
+  // Load student profile
+  function loadProfile() {
+    db.collection("users").doc(studentEmail).get().then(doc => {
+      const data = doc.data();
+      if (!data) return alert("Student data not found.");
+
+      profileElements.name.textContent = data.name || "Unnamed";
+      profileElements.branch.innerHTML = `<strong>Branch:</strong> ${data.branch}`;
+      profileElements.year.innerHTML = `<strong>Year:</strong> ${data.year}`;
+      profileElements.interests.innerHTML = `<strong>Interested in:</strong> ${data.interests}`;
+      profileElements.linkedin.href = data.linkedin;
+      profileElements.linkedin.textContent = data.linkedin;
+    });
+  }
+
+  // Load projects uploaded by student
+  function loadProjects() {
+    db.collection("projects")
+      .where("uploadedBy", "==", studentEmail)
+      .orderBy("timestamp", "desc")
+      .get()
+      .then(snapshot => {
+        const section = profileElements.projectSection;
+        section.innerHTML = `<h2>Uploaded Projects</h2>`;
+        
+        if (snapshot.empty) {
+          section.innerHTML += "<p>No projects uploaded yet.</p>";
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "project-card";
+          div.innerHTML = `
+            <h3>${data.title}</h3>
+            <p><strong>Domain:</strong> ${data.domain}</p>
+            <p><strong>Motivation:</strong> ${data.motivation}</p>
+            <p><strong>Learnings:</strong> ${data.learnings}</p>
+            <p><strong>Mistakes:</strong> ${data.mistakes}</p>
+            <p><strong>Prerequisites:</strong> ${data.prerequisites}</p>
+          `;
+          section.appendChild(div);
+        });
+
+        // Message Button
+        const btn = document.createElement("button");
+        btn.className = "message-btn";
+        btn.textContent = "Send Message";
+        btn.onclick = () => {
+          window.location.href = `mailto:${studentEmail}?subject=I saw your project on VCE Projects Hub!`;
+        };
+        section.appendChild(btn);
+      });
+  }
+
+  window.onload = function () {
+    loadProfile();
+    loadProjects();
+  };
+</script>

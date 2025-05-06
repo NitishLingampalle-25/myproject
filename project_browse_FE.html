@@ -1,0 +1,59 @@
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBhlZbYOaitsv0SOXC5PNi3JDob7KhRxOU",
+    authDomain: "vce-projects-hub.firebaseapp.com",
+    projectId: "vce-projects-hub",
+    storageBucket: "vce-projects-hub.appspot.com",
+    messagingSenderId: "1043662637389",
+    appId: "1:1043662637389:web:316b9be9e37cd5742d8f04",
+    measurementId: "G-8Z0QYTVFFJ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const projectList = document.getElementById("projectList");
+
+  function loadProjects(filterBranch = "all") {
+    projectList.innerHTML = ""; // Clear existing cards
+    db.collection("projects").orderBy("timestamp", "desc").get().then(snapshot => {
+      snapshot.forEach(doc => {
+        const data = doc.data();
+
+        // Check if project matches filter
+        if (filterBranch !== "all" && data.branch !== filterBranch) return;
+
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.setAttribute("data-branch", data.branch || "Unknown");
+
+        card.innerHTML = `
+          <h3>${data.title}</h3>
+          <p><strong>By:</strong> ${data.name || "Unknown"} (${data.year || "N/A"}, ${data.branch || "N/A"})</p>
+          <p><strong>Domain:</strong> ${data.domain}</p>
+          <p><strong>Motivation:</strong> ${data.motivation}</p>
+          <button class="connect-btn" onclick="messageUser('${data.uploadedBy}')">Message</button>
+        `;
+        projectList.appendChild(card);
+      });
+    });
+  }
+
+  function filterProjects() {
+    const selectedBranch = document.getElementById("branchFilter").value;
+    loadProjects(selectedBranch);
+  }
+
+  function messageUser(email) {
+    window.location.href = `mailto:${email}?subject=Interested in your project on VCE Projects Hub`;
+  }
+
+  // Load all projects on page load
+  window.onload = () => {
+    loadProjects();
+  };
+</script>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Uploaded Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #80deea);
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background-color: #006064;
+      padding: 15px 30px;
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #004d40;
+      margin-bottom: 30px;
+    }
+
+    .project-card {
+      background-color: #ffffffcc;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .project-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #006064;
+    }
+
+    .project-desc {
+      margin-top: 10px;
+      color: #333;
+    }
+
+    .tags {
+      margin-top: 10px;
+    }
+
+    .tag {
+      background-color: #80deea;
+      color: #004d40;
+      padding: 5px 10px;
+      border-radius: 15px;
+      margin-right: 8px;
+      font-size: 14px;
+      display: inline-block;
+    }
+
+    .view-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .view-btn:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">Project Dashboard</div>
+  <div class="container">
+    <h1>Uploaded Projects</h1>
+
+    <!-- Project Card 1 -->
+    <div class="project-card">
+      <div class="project-title">Smart Sewage Cleaning Robot</div>
+      <div class="project-desc">A robot that automates sewage cleaning, reducing human involvement and promoting hygiene.</div>
+      <div class="tags">
+        <span class="tag">IoT</span>
+        <span class="tag">Robotics</span>
+        <span class="tag">Automation</span>
+      </div>
+      <button class="view-btn">View More</button>
+    </div>
+
+    <!-- Project Card 2 -->
+    <div class="project-card">
+      <div class="project-title">Green Energy Marketplace</div>
+      <div class="project-desc">A platform for trading and sharing green energy between local communities.</div>
+      <div class="tags">
+        <span class="tag">Sustainability</span>
+        <span class="tag">Marketplace</span>
+      </div>
+      <button class="view-btn">View More</button>
+    </div>
+
+    <!-- Add more project cards below similarly -->
+  </div>
+</body>
+</html>
